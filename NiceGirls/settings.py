@@ -8,12 +8,10 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 import random
 
-
 BOT_NAME = 'NiceGirls'
 
 SPIDER_MODULES = ['NiceGirls.spiders']
 NEWSPIDER_MODULE = 'NiceGirls.spiders'
-
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'NiceGirls (+http://www.yourdomain.com)'
@@ -73,7 +71,7 @@ ROBOTSTXT_OBEY = False
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
-   'NiceGirls.middlewares.NicegirlsSpiderMiddleware': 542,
+    'NiceGirls.middlewares.NicegirlsSpiderMiddleware': 542,
 }
 
 # Enable or disable extensions
@@ -85,14 +83,14 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'NiceGirls.pipelines.NiceGirlsPipeline': 300,
-   'NiceGirls.pipelines.NiceGirlsDownloaderPipeline': 301,
+    'NiceGirls.pipelines.NiceGirlsPipeline': 300,
+    'NiceGirls.pipelines.NiceGirlsDownloaderPipeline': 301,
 }
 
 CONCURRENT_REQUESTS = 100
 CONCURRENT_REQUESTS_PER_DOMAIN = 100
 REACTOR_THREADPOOL_MAXSIZE = 20
-# LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'INFO'
 DOWNLOAD_TIMEOUT = 100
 REDIRECT_ENABLED = True
 

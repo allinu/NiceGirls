@@ -1,6 +1,6 @@
-from unicodedata import category
 import scrapy
 from NiceGirls.items import NiceGirlsItem
+
 
 class VmgirlsSpider(scrapy.Spider):
     name = 'vmgirls'
@@ -8,15 +8,20 @@ class VmgirlsSpider(scrapy.Spider):
     start_urls = ['https://www.vmgirls.com/archives.html']
 
     def parse(self, response):
-        page_links = response.xpath('//*[@id="archives"]/ul/li/ul/li/a/@href').extract()
+        page_links = response.xpath(
+            '//*[@id="archives"]/ul/li/ul/li/a/@href').extract()
         for link in page_links:
             yield scrapy.Request(link, callback=self.parse_page)
 
     def parse_page(self, response):
         item = NiceGirlsItem()
         page_name = response.css('title::text').get()
-        image_links = response.xpath('/html/body/main/div/div[2]/div[1]/div/div/div[2]/div[3]/p/img/@src').extract()
-        category_name = response.xpath('/html/body/main/div/div[2]/div[1]/div/div/div[2]/div[4]/span/a/text()').extract()
+        image_links = response.xpath(
+            '/html/body/main/div/div[2]/div[1]/div/div/div[2]/div[3]/p/img/@src'
+        ).extract()
+        category_name = response.xpath(
+            '/html/body/main/div/div[2]/div[1]/div/div/div[2]/div[4]/span/a/text()'
+        ).extract()
         category_name = ' '.join(category_name)
         for link in image_links:
             item['site_name'] = 'vmgirls.com'
