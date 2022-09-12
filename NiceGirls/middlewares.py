@@ -15,6 +15,9 @@ class NicegirlsSpiderMiddleware:
     # scrapy acts as if the spider middleware does not modify the
     # passed objects.
 
+    retry_count = 100
+    proxy = ''
+
     @classmethod
     def from_crawler(cls, crawler):
         # This method is used by Scrapy to create your spiders.
@@ -69,22 +72,21 @@ class NicegirlsSpiderMiddleware:
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
-        self.retry_count = 100
+        if self.proxy == '':
+            self.proxy = self.get_proxy().get("proxy")
         while self.retry_count > 0:
-            proxy = self.get_proxy().get("proxy")
-            request.meta['proxy'] = "http://{}".format(proxy)
-            spider.logger.info("使用代理：{}".format(proxy))
+            request.meta['proxy'] = "http://{}".format(self.proxy)
+            spider.logger.info("使用代理：{}".format(self.proxy))
             if response.status >= 400:
                 spider.logger.info("访问失败")
-                self.delete_proxy(proxy)
+                self.delete_proxy(self.proxy)
                 self.retry_count -= 1
                 continue
             else:
                 spider.logger.info(f"访问结果: {response}")
                 spider.logger.info("访问成功")
+                self.retry_count = 100
                 return response
-
-
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)

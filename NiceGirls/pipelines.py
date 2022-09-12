@@ -7,10 +7,10 @@
 # useful for handling different item types with a single interface
 
 import sqlite3
-import scrapy
 from scrapy.pipelines.images import ImagesPipeline
 import os
 from scrapy.http import Request
+import time
 
 class NiceGirlsPipeline:
     def open_spider(self, spider):
@@ -32,6 +32,9 @@ class NiceGirlsPipeline:
             self.conn.commit()
         except sqlite3.IntegrityError:
             pass
+        except sqlite3.OperationalError:
+            time.sleep(1)
+            # item = self.process_item(item, spider)
         return item
 
     def close_spider(self, spider):

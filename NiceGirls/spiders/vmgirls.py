@@ -5,7 +5,7 @@ from NiceGirls.items import NiceGirlsItem
 class VmgirlsSpider(scrapy.Spider):
     name = 'vmgirls'
     allowed_domains = ['www.vmgirls.com']
-    start_urls = ['https://www.vmgirls.com/archives.html']
+    start_urls = ['https://www.vmgirls.com/archives/']
 
     def parse(self, response):
         page_links = response.xpath(
@@ -17,10 +17,11 @@ class VmgirlsSpider(scrapy.Spider):
         item = NiceGirlsItem()
         page_name = response.css('title::text').get()
         image_links = response.xpath(
-            '/html/body/main/div/div[2]/div[1]/div/div/div[2]/div[3]/p/img/@src'
+            '//*["nc-light-gallery"]/img/@src'
         ).extract()
+        print(image_links)
         category_name = response.xpath(
-            '/html/body/main/div/div[2]/div[1]/div/div/div[2]/div[4]/span/a/text()'
+            '/html/body/main/div/div[2]/div[1]/div/div/div[3]/div/div[2]/div[2]/span[1]/a/text()'
         ).extract()
         category_name = ' '.join(category_name)
         for link in image_links:
