@@ -9,7 +9,7 @@ _⚠ 本项目为学习项目，如果侵犯了您的权益，请及时联系删
 - [Scrapy](https://scrapy.org/)
 - [Pillow](https://python-pillow.org/)
 
-## 涉及的知识点
+## 涉及技术
 
 - scrapy 代理的使用
 - 随机 UA 的使用
@@ -50,6 +50,7 @@ pip install -U pip && pip install scrapy pillow
 ```shell
 # 青春、唯美
 scrapy crawl vmgirls
+scrapy crawl nicegirl
 # or
 # 性感
 scrapy crawl photos18

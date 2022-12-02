@@ -4,28 +4,29 @@ from NiceGirls.items import NiceGirlsItem
 
 class VmgirlsSpider(scrapy.Spider):
     name = 'vmgirls'
-    allowed_domains = ['www.vmgirls.com']
-    start_urls = ['https://www.vmgirls.com/archives/']
+    allowed_domains = ['nicegirl.in']
+    start_urls = ['https://nicegirl.in/archives/']
 
     def parse(self, response):
-        page_links = response.xpath(
-            '//*[@id="archives"]/ul/li/ul/li/a/@href').extract()
-        for link in page_links:
-            yield scrapy.Request(link, callback=self.parse_page)
+        list_links = response.xpath(
+            '/html/body/section/div/div/div[1]/div/div/div/article/div/p[2]/a/@href').extract()
+        next_page = response.xpath('//div[@class="pagination-next"]/a/@href').extract()[0]
+        for link in list_links:
+            yield scrapy.Request("https://nicegirl.in" + link, callback=self.parse_page)
+
+        if(next_page):
+            yield scrapy.Request("https://nicegirl.in" + next_page, callback=self.parse)
+    
 
     def parse_page(self, response):
         item = NiceGirlsItem()
-        page_name = response.css('title::text').get()
+        page_name = response.xpath('//h1[contains(@class, "title")]/text()').extract()[0]
         image_links = response.xpath(
-            '//*["nc-light-gallery"]/img/@src'
+            '/html/body/section/div/div/div[1]/div[1]/article/div[3]/p[2]/a/img/@src'
         ).extract()
-        print(image_links)
-        category_name = response.xpath(
-            '/html/body/main/div/div[2]/div[1]/div/div/div[3]/div/div[2]/div[2]/span[1]/a/text()'
-        ).extract()
-        category_name = ' '.join(category_name)
+        category_name = ""
         for link in image_links:
-            item['site_name'] = 'vmgirls.com'
+            item['site_name'] = 'nicegirl.in'
             item['category_name'] = category_name
             page_name = page_name.split('丨')[0]
             page_name = str(page_name).strip()
